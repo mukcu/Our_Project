@@ -40,6 +40,8 @@ def generate_level(level):
             elif level[y][x] == '@':
                 Tile('empty', x, y)
                 new_player = Player(x, y)
+            elif level[y][x] == '/':
+                Tile('локация', x, y)
     return new_player, x, y
 
 
@@ -99,8 +101,6 @@ class Player(pygame.sprite.Sprite):
 
 
 
-
-
 def terminate():
     pygame.quit()
     sys.exit()
@@ -150,7 +150,8 @@ if __name__ == '__main__':
     tile_images = {
         'wall': load_image('box.png'),
         'empty': load_image('grass.png'),
-        'tp': load_image('tp.jpg')
+        'tp': load_image('tp.jpg'),
+        'локация': load_image('fon_lok.png')
     }
     player_image = load_image('robot_1.png')
     player, level_x, level_y = generate_level(load_level('rate.txt'))
