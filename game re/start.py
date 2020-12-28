@@ -40,16 +40,29 @@ def generate_level(level):
             elif level[y][x] == '@':
                 Tile('empty', x, y)
                 new_player = Player(x, y)
-            elif level[y][x] == '/':
-                Tile('локация', x, y)
+            #elif level[y][x] == '/':
+                #Tile('локация', x, y)
     return new_player, x, y
 
 
 tile_width = tile_height = 50
 flag = 0
 FPS = 50
-width, height = 500, 500
+width, height = 400, 400
 WIDTH = HEIGHT = 500
+
+class Camera:
+    def __init__(self):
+        self.dx = 0
+        self.dy = 0
+
+    def apply(self, obj):
+        obj.rect.x += self.dx
+        obj.rect.y += self.dy
+
+    def update(self, target):
+        self.dx = -(target.rect.x + target.rect.w // 2 - width // 2)
+        self.dy = -(target.rect.y + target.rect.h // 2 - height // 2)
 
 class Teleport_blocks(pygame.sprite.Sprite):
     def __init__(self, tile_type, pos_x, pos_y):
@@ -151,11 +164,15 @@ if __name__ == '__main__':
         'wall': load_image('box.png'),
         'empty': load_image('grass.png'),
         'tp': load_image('tp.jpg'),
-        'локация': load_image('1_TECT.png')
+        #'локация': load_image('1_TECT.png')
     }
     player_image = load_image('robot_1.png')
     player, level_x, level_y = generate_level(load_level('rate.txt'))
+    camera = Camera()
     while True:
+        camera.update(player)
+        for sprite in all_sprites:
+            camera.apply(sprite)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                     terminate()
@@ -176,19 +193,19 @@ if __name__ == '__main__':
                 kor_x = kor[0]
                 kor_y = kor[1]
         if pygame.key.get_pressed()[1073741903]: #вправо
-            player.rect.x += 3
+            player.rect.x += 6
             flag = 1
             player.update(kor_x, kor_y)
         elif pygame.key.get_pressed()[1073741904]: #влево
             flag = 2
-            player.rect.x -= 3
+            player.rect.x -= 6
             player.update(kor_x, kor_y)
         elif pygame.key.get_pressed()[1073741906]: #вверх
-            player.rect.y -= 3
+            player.rect.y -= 6
             flag = 3
             player.update(kor_x, kor_y)
         elif pygame.key.get_pressed()[1073741905]: #вниз
-            player.rect.y += 3
+            player.rect.y += 6
             flag = 4
             player.update(kor_x, kor_y)
         pygame.display.flip()
@@ -196,10 +213,6 @@ if __name__ == '__main__':
         simple.draw(screen)
         player_group.draw(screen)
         tp.draw(screen)
-        Border(0, 200, width, 200)
-        Border(0, 300, width, height)
-        Border(0, 200, 0, height)
-        Border(width, 200, width, height)
         horizontal_borders.draw(screen)
         vertical_borders.draw(screen)
         clock.tick(FPS)
