@@ -102,14 +102,14 @@ class Player(pygame.sprite.Sprite):
     def update(self, x, y):
         if pygame.sprite.spritecollideany(self, vertical_borders):
             if flag == 1:
-                self.rect = self.rect.move(x - 5, y)
+                self.rect = self.rect.move(x - 7, y)
             if flag == 2:
-                self.rect = self.rect.move(x + 5, y)
+                self.rect = self.rect.move(x + 7, y)
         if pygame.sprite.spritecollideany(self, horizontal_borders):
             if flag == 3:
-                self.rect = self.rect.move(x, y + 5)
+                self.rect = self.rect.move(x, y + 7)
             if flag == 4:
-                self.rect = self.rect.move(x, y - 5)
+                self.rect = self.rect.move(x, y - 7)
 
 
 
@@ -136,7 +136,16 @@ def start_screen():
         intro_rect.x = 10
         text_coord += intro_rect.height
         screen.blit(string_rendered, intro_rect)
-
+    Border(2000, 200, 2950, 200)
+    Border(2000, 200, 2000, 300)
+    Border(2000, 300, 2850, 300)
+    Border(2950, 200, 2950, 1000)
+    Border(2950, 1000, 3150, 1000)
+    Border(2850, 300, 2850, 1000)
+    Border(2950, 1000, 3150, 1000)
+    Border(2650, 1000, 2850, 1000)
+    Border(2650, 1000, 2650, 1100)
+    Border(2000, 1100, 2650, 1100)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
