@@ -2,8 +2,10 @@ import sys
 import pygame
 import os
 
-from pygame.sprite import Group
-
+first_key = 0
+second_key = 0
+third_key = 0
+fourth_key = 0
 
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
@@ -45,8 +47,7 @@ def generate_level(level):
             elif level[y][x] == '/':
                 Tile('локация', x, y)
             elif level[y][x] == '1':
-                Tile('empty', x, y)
-                first_key = Key(x, y)
+                first_key = Key_1(x, y)
     return first_key, new_player, x, y
 
 
@@ -112,14 +113,18 @@ class Player(pygame.sprite.Sprite):
             if flag == 4:
                 self.rect = self.rect.move(x, y - 7)
 
-class Key(pygame.sprite.Sprite):
+class Key_1(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
         super().__init__(keys, all_sprites)
         self.image = first_key_image
-        self.rect = self.image.get_rect().move(pos_x, pos_y)
+        self.rect = self.image.get_rect().move(
+            tile_width * pos_x, tile_height * pos_y)
 
-    def update(self, x, y):
-        pass
+
+    def update(self):
+        if pygame.sprite.spritecollideany(self, player_group):
+            first_key = 1
+            self.kill()
 
 def terminate():
     pygame.quit()
@@ -283,8 +288,9 @@ if __name__ == '__main__':
             player.rect.y += 6
             flag = 4
             player.update(kor_x, kor_y)
+        first_key.update()
         pygame.display.flip()
-        screen.fill((255, 255, 255))
+        screen.fill((163, 73, 164))
         keys.draw(screen)
         simple.draw(screen)
         player_group.draw(screen)
