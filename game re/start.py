@@ -2,6 +2,8 @@ import sys
 import pygame
 import os
 
+from pygame.sprite import Group
+
 
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
@@ -26,8 +28,9 @@ def load_level(filename):
     max_width = max(map(len, level_map))
     return list(map(lambda x: x.ljust(max_width, '.'), level_map))
 
+
 def generate_level(level):
-    new_player, x, y = None, None, None
+    first_key, new_player, x, y = None, None, None, None
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '.':
@@ -36,13 +39,15 @@ def generate_level(level):
                 Tile('tp', x, y)
             elif level[y][x] == '#':
                 Tile('wall', x, y)
-                tile = Tile('wall', x, y)
             elif level[y][x] == '@':
                 Tile('empty', x, y)
                 new_player = Player(x, y)
             elif level[y][x] == '/':
                 Tile('локация', x, y)
-    return new_player, x, y
+            elif level[y][x] == '1':
+                Tile('empty', x, y)
+                first_key = Key(x, y)
+    return first_key, new_player, x, y
 
 
 tile_width = tile_height = 50
@@ -64,11 +69,6 @@ class Camera:
         self.dx = -(target.rect.x + target.rect.w // 2 - width // 2)
         self.dy = -(target.rect.y + target.rect.h // 2 - height // 2)
 
-class Teleport_blocks(pygame.sprite.Sprite):
-    def __init__(self, tile_type, pos_x, pos_y):
-        super().__init__(tp, all_sprites)
-        self.image = tile_images[tile_type]
-        self.rect = self.image.get_rect().move(tile_width * pos_x, tile_height * pos_y)
 
 class Border(pygame.sprite.Sprite):
     def __init__(self, x1, y1, x2, y2):
@@ -81,6 +81,7 @@ class Border(pygame.sprite.Sprite):
             self.add(horizontal_borders)
             self.image = pygame.Surface([x2 - x1, 1])
             self.rect = pygame.Rect(x1, y1, x2 - x1, 1)
+
 
 class Tile(pygame.sprite.Sprite):
     def __init__(self, tile_type, pos_x, pos_y):
@@ -111,8 +112,14 @@ class Player(pygame.sprite.Sprite):
             if flag == 4:
                 self.rect = self.rect.move(x, y - 7)
 
+class Key(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y):
+        super().__init__(keys, all_sprites)
+        self.image = first_key_image
+        self.rect = self.image.get_rect().move(pos_x, pos_y)
 
-
+    def update(self, x, y):
+        pass
 
 def terminate():
     pygame.quit()
@@ -146,6 +153,8 @@ def start_screen():
     Border(2650, 1000, 2850, 1000)
     Border(2650, 1000, 2650, 1100)
     Border(2000, 1100, 2650, 1100)
+    Border(7 * 50, 20 * 50, 7 * 50, 21 * 50)
+    Border(18 * 50, 12 * 50, 18 * 50, 14 * 50)
     Border(18 * 50, 12 * 50, 28 * 50, 12 * 50)
     Border(28 * 50, 12 * 50, 28 * 50, 14 * 50)
     Border(26 * 50, 14 * 50, 28 * 50, 14 * 50)
@@ -211,12 +220,13 @@ def start_screen():
         pygame.display.flip()
         clock.tick(FPS)
 
+
 if __name__ == '__main__':
     kor_x = 0
     kor_y = 0
     clock = pygame.time.Clock()
     pygame.init()
-    tp = pygame.sprite.Group()
+    keys = pygame.sprite.Group()
     horizontal_borders = pygame.sprite.Group()
     vertical_borders = pygame.sprite.Group()
     simple = pygame.sprite.Group()
@@ -228,10 +238,11 @@ if __name__ == '__main__':
         'wall': load_image('box.png'),
         'empty': load_image('grass.png'),
         'tp': load_image('tp.jpg'),
-        'локация': load_image('1_TECT.png')
+        'локация': load_image('1_TECT.png'),
     }
     player_image = load_image('robot_1.png')
-    player, level_x, level_y = generate_level(load_level('rate.txt'))
+    first_key_image = load_image('red_key.png')
+    first_key, player, level_x, level_y = generate_level(load_level('rate.txt'))
     camera = Camera()
     while True:
         camera.update(player)
@@ -239,7 +250,7 @@ if __name__ == '__main__':
             camera.apply(sprite)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                    terminate()
+                terminate()
             if event.type == pygame.K_RIGHT:
                 kor = event.pos()
                 kor_x = kor[0]
@@ -256,15 +267,15 @@ if __name__ == '__main__':
                 kor = event.pos()
                 kor_x = kor[0]
                 kor_y = kor[1]
-        if pygame.key.get_pressed()[1073741903]: #вправо
+        if pygame.key.get_pressed()[1073741903]:  # вправо
             player.rect.x += 6
             flag = 1
             player.update(kor_x, kor_y)
-        elif pygame.key.get_pressed()[1073741904]: #влево
+        elif pygame.key.get_pressed()[1073741904]:  # влево
             flag = 2
             player.rect.x -= 6
             player.update(kor_x, kor_y)
-        elif pygame.key.get_pressed()[1073741906]: #вверх
+        elif pygame.key.get_pressed()[1073741906]:  # вверх
             player.rect.y -= 6
             flag = 3
             player.update(kor_x, kor_y)
@@ -274,9 +285,9 @@ if __name__ == '__main__':
             player.update(kor_x, kor_y)
         pygame.display.flip()
         screen.fill((255, 255, 255))
+        keys.draw(screen)
         simple.draw(screen)
         player_group.draw(screen)
-        tp.draw(screen)
         horizontal_borders.draw(screen)
         vertical_borders.draw(screen)
         clock.tick(FPS)
