@@ -42,6 +42,8 @@ def generate_level(level):
                 new_player = Player(x, y)
             elif level[y][x] == '/':
                 Tile('локация', x, y)
+            elif level[y][x] == 'b':
+                pass
     return new_player, x, y
 
 
