@@ -2,10 +2,6 @@ import sys
 import pygame
 import os
 
-def boss_fight():
-    if __name__ == '__main__':
-        pygame.init()
-
 
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
@@ -116,7 +112,7 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, x, y):
         if pygame.sprite.spritecollideany(self, boss_game):
-            print(x, y)
+            self.rect = self.rect.move(x - 53 * 50, y + 18 * 50)
         elif pygame.sprite.spritecollideany(self, vertical_borders):
             if flag == 1:
                 self.rect = self.rect.move(x - 7, y)
@@ -153,16 +149,16 @@ def start_screen():
         intro_rect.x = 10
         text_coord += intro_rect.height
         screen.blit(string_rendered, intro_rect)
-    Border(2000, 200, 2950, 200)
-    Border(2000, 200, 2000, 300)
-    Border(2000, 300, 2850, 300)
-    Border(2950, 200, 2950, 1000)
-    Border(2950, 1000, 3150, 1000)
-    Border(2850, 300, 2850, 1000)
-    Border(2950, 1000, 3150, 1000)
-    Border(2650, 1000, 2850, 1000)
-    Border(2650, 1000, 2650, 1100)
-    Border(2000, 1100, 2650, 1100)
+    Border(40 * 50, 4 * 50, 59 * 50, 4 * 50)
+    Border(40 * 50, 4 * 50, 40 * 50, 6 * 50)
+    Border(40 * 50, 6 * 50, 57 * 50, 6 * 50)
+    Border(59 * 50, 4 * 50, 59 * 50, 20 * 50)
+    Border(59 * 50, 20 * 50, 63 * 50, 20 * 50)
+    Border(57 * 50, 6 * 50, 57 * 50, 20 * 50)
+    Border(59 * 50, 20 * 50, 63 * 50, 20 * 50)
+    Border(53 * 50, 20 * 50, 57 * 50, 20 * 50)
+    Border(53 * 50, 20 * 50, 53 * 50, 22 * 50)
+    Border(40 * 50, 22 * 50, 53 * 50, 22 * 50)
     Border(18 * 50, 12 * 50, 28 * 50, 12 * 50)
     Border(28 * 50, 12 * 50, 28 * 50, 14 * 50)
     Border(26 * 50, 14 * 50, 28 * 50, 14 * 50)
