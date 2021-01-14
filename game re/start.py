@@ -27,7 +27,7 @@ def load_level(filename):
     return list(map(lambda x: x.ljust(max_width, '.'), level_map))
 
 def generate_level(level):
-    boss, new_player, x, y = None, None, None, None
+    new_player, x, y = None, None, None
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '.':
@@ -42,9 +42,7 @@ def generate_level(level):
                 new_player = Player(x, y)
             elif level[y][x] == '/':
                 Tile('локация', x, y)
-            elif level[y][x] == 'b':
-                boss = Boss(x, y)
-    return boss, new_player, x, y
+    return new_player, x, y
 
 
 tile_width = tile_height = 50
@@ -65,15 +63,6 @@ class Camera:
     def update(self, target):
         self.dx = -(target.rect.x + target.rect.w // 2 - width // 2)
         self.dy = -(target.rect.y + target.rect.h // 2 - height // 2)
-
-class Boss(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y):
-        super().__init__(boss_game, all_sprites)
-        self.image = boss_image
-        self.rect = self.image.get_rect().move(tile_width * pos_x, tile_height * pos_y)
-
-
-
 
 class Teleport_blocks(pygame.sprite.Sprite):
     def __init__(self, tile_type, pos_x, pos_y):
@@ -111,14 +100,12 @@ class Player(pygame.sprite.Sprite):
             tile_width * pos_x + 15, tile_height * pos_y + 5)
 
     def update(self, x, y):
-        if pygame.sprite.spritecollideany(self, boss_game):
-            self.rect = self.rect.move(x - 53 * 50, y + 18 * 50)
-        elif pygame.sprite.spritecollideany(self, vertical_borders):
+        if pygame.sprite.spritecollideany(self, vertical_borders):
             if flag == 1:
                 self.rect = self.rect.move(x - 7, y)
             if flag == 2:
                 self.rect = self.rect.move(x + 7, y)
-        elif pygame.sprite.spritecollideany(self, horizontal_borders):
+        if pygame.sprite.spritecollideany(self, horizontal_borders):
             if flag == 3:
                 self.rect = self.rect.move(x, y + 7)
             if flag == 4:
@@ -149,16 +136,16 @@ def start_screen():
         intro_rect.x = 10
         text_coord += intro_rect.height
         screen.blit(string_rendered, intro_rect)
-    Border(40 * 50, 4 * 50, 59 * 50, 4 * 50)
-    Border(40 * 50, 4 * 50, 40 * 50, 6 * 50)
-    Border(40 * 50, 6 * 50, 57 * 50, 6 * 50)
-    Border(59 * 50, 4 * 50, 59 * 50, 20 * 50)
-    Border(59 * 50, 20 * 50, 63 * 50, 20 * 50)
-    Border(57 * 50, 6 * 50, 57 * 50, 20 * 50)
-    Border(59 * 50, 20 * 50, 63 * 50, 20 * 50)
-    Border(53 * 50, 20 * 50, 57 * 50, 20 * 50)
-    Border(53 * 50, 20 * 50, 53 * 50, 22 * 50)
-    Border(40 * 50, 22 * 50, 53 * 50, 22 * 50)
+    Border(2000, 200, 2950, 200)
+    Border(2000, 200, 2000, 300)
+    Border(2000, 300, 2850, 300)
+    Border(2950, 200, 2950, 1000)
+    Border(2950, 1000, 3150, 1000)
+    Border(2850, 300, 2850, 1000)
+    Border(2950, 1000, 3150, 1000)
+    Border(2650, 1000, 2850, 1000)
+    Border(2650, 1000, 2650, 1100)
+    Border(2000, 1100, 2650, 1100)
     Border(18 * 50, 12 * 50, 28 * 50, 12 * 50)
     Border(28 * 50, 12 * 50, 28 * 50, 14 * 50)
     Border(26 * 50, 14 * 50, 28 * 50, 14 * 50)
@@ -230,7 +217,6 @@ if __name__ == '__main__':
     clock = pygame.time.Clock()
     pygame.init()
     tp = pygame.sprite.Group()
-    boss_game = pygame.sprite.Group()
     horizontal_borders = pygame.sprite.Group()
     vertical_borders = pygame.sprite.Group()
     simple = pygame.sprite.Group()
@@ -245,8 +231,7 @@ if __name__ == '__main__':
         'локация': load_image('1_TECT.png')
     }
     player_image = load_image('robot_1.png')
-    boss_image = load_image('boss.png')
-    boss, player, level_x, level_y = generate_level(load_level('rate.txt'))
+    player, level_x, level_y = generate_level(load_level('rate.txt'))
     camera = Camera()
     while True:
         camera.update(player)
@@ -292,7 +277,6 @@ if __name__ == '__main__':
         simple.draw(screen)
         player_group.draw(screen)
         tp.draw(screen)
-        boss_game.draw(screen)
         horizontal_borders.draw(screen)
         vertical_borders.draw(screen)
         clock.tick(FPS)
