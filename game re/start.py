@@ -119,16 +119,14 @@ class Player(pygame.sprite.Sprite):
     def update(self, x, y):
         if pygame.sprite.spritecollideany(self, vertical_borders):
             if flag == 1:
-                self.rect = self.rect.move(x - 7, y)
+                self.rect = self.rect.move(x - 6, y)
             if flag == 2:
-                self.rect = self.rect.move(x + 7, y)
+                self.rect = self.rect.move(x + 6, y)
         if pygame.sprite.spritecollideany(self, horizontal_borders):
             if flag == 3:
-                self.rect = self.rect.move(x, y + 7)
+                self.rect = self.rect.move(x, y + 6)
             if flag == 4:
-                self.rect = self.rect.move(x, y - 7)
-
-
+                self.rect = self.rect.move(x, y - 6)
 
 
 def terminate():
