@@ -27,7 +27,7 @@ def load_level(filename):
     return list(map(lambda x: x.ljust(max_width, '.'), level_map))
 
 def generate_level(level):
-    new_player, x, y = None, None, None
+    first_key, new_player, x, y = None, None, None, None
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '.':
@@ -36,15 +36,19 @@ def generate_level(level):
                 Tile('tp', x, y)
             elif level[y][x] == '#':
                 Tile('wall', x, y)
-                tile = Tile('wall', x, y)
             elif level[y][x] == '@':
                 Tile('empty', x, y)
                 new_player = Player(x, y)
             elif level[y][x] == '/':
                 Tile('локация', x, y)
-    return new_player, x, y
+            elif level[y][x] == '1':
+                first_key = Key_1(x, y)
+    return first_key, new_player, x, y
 
-
+first_key = 0
+second_key = 0
+third_key = 0
+fourth_key = 0
 tile_width = tile_height = 50
 flag = 0
 FPS = 50
@@ -63,6 +67,19 @@ class Camera:
     def update(self, target):
         self.dx = -(target.rect.x + target.rect.w // 2 - width // 2)
         self.dy = -(target.rect.y + target.rect.h // 2 - height // 2)
+
+class Key_1(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y):
+        super().__init__(keys, all_sprites)
+        self.image = first_key_image
+        self.rect = self.image.get_rect().move(
+            tile_width * pos_x, tile_height * pos_y)
+
+
+    def update(self):
+        if pygame.sprite.spritecollideany(self, player_group):
+            first_key = 1
+            self.kill()
 
 class Teleport_blocks(pygame.sprite.Sprite):
     def __init__(self, tile_type, pos_x, pos_y):
@@ -217,6 +234,7 @@ if __name__ == '__main__':
     clock = pygame.time.Clock()
     pygame.init()
     tp = pygame.sprite.Group()
+    keys = pygame.sprite.Group()
     horizontal_borders = pygame.sprite.Group()
     vertical_borders = pygame.sprite.Group()
     simple = pygame.sprite.Group()
@@ -230,8 +248,9 @@ if __name__ == '__main__':
         'tp': load_image('tp.jpg'),
         'локация': load_image('1_TECT.png')
     }
+    first_key_image = load_image('red_key.png')
     player_image = load_image('robot_1.png')
-    player, level_x, level_y = generate_level(load_level('rate.txt'))
+    first_key, player, level_x, level_y = generate_level(load_level('rate.txt'))
     camera = Camera()
     while True:
         camera.update(player)
@@ -272,9 +291,11 @@ if __name__ == '__main__':
             player.rect.y += 6
             flag = 4
             player.update(kor_x, kor_y)
+        first_key.update()
         pygame.display.flip()
-        screen.fill((255, 255, 255))
+        screen.fill((163, 73, 164))
         simple.draw(screen)
+        keys.draw(screen)
         player_group.draw(screen)
         tp.draw(screen)
         horizontal_borders.draw(screen)
