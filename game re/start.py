@@ -27,7 +27,7 @@ def load_level(filename):
     return list(map(lambda x: x.ljust(max_width, '.'), level_map))
 
 def generate_level(level):
-    first_key, new_player, x, y = None, None, None, None
+    boss, first_key, new_player, x, y = None, None, None, None, None
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '.':
@@ -43,7 +43,9 @@ def generate_level(level):
                 Tile('локация', x, y)
             elif level[y][x] == '1':
                 first_key = Key_1(x, y)
-    return first_key, new_player, x, y
+            elif level[y][x] == 'b':
+                boss = Boss(x, y)
+    return boss, first_key, new_player, x, y
 
 first_key = 0
 second_key = 0
@@ -109,6 +111,12 @@ class Tile(pygame.sprite.Sprite):
     def update(self):
         pass
 
+class Boss(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y):
+        super().__init__(boss_game, all_sprites)
+        self.image = boss_image
+        self.rect = self.image.get_rect().move(tile_width * pos_x, tile_height * pos_y)
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
         super().__init__(player_group, all_sprites)
@@ -117,12 +125,14 @@ class Player(pygame.sprite.Sprite):
             tile_width * pos_x + 15, tile_height * pos_y + 5)
 
     def update(self, x, y):
-        if pygame.sprite.spritecollideany(self, vertical_borders):
+        if pygame.sprite.spritecollideany(self, boss_game):
+            self.rect = self.rect.move(x - 53 * 50, y + 18 * 50)
+        elif pygame.sprite.spritecollideany(self, vertical_borders):
             if flag == 1:
                 self.rect = self.rect.move(x - 6, y)
             if flag == 2:
                 self.rect = self.rect.move(x + 6, y)
-        if pygame.sprite.spritecollideany(self, horizontal_borders):
+        elif pygame.sprite.spritecollideany(self, horizontal_borders):
             if flag == 3:
                 self.rect = self.rect.move(x, y + 6)
             if flag == 4:
@@ -135,10 +145,10 @@ def terminate():
 
 
 def start_screen():
-    intro_text = ["ЗАСТАВКА", "",
-                  "Правила игры",
-                  "Если в правилах несколько строк,",
-                  "приходится выводить их построчно"]
+    intro_text = ["", "",
+                  "       Жизнь",
+                  "       Просто",
+                  "       Фальшивка"]
     fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 30)
@@ -151,16 +161,16 @@ def start_screen():
         intro_rect.x = 10
         text_coord += intro_rect.height
         screen.blit(string_rendered, intro_rect)
-    Border(2000, 200, 2950, 200)
-    Border(2000, 200, 2000, 300)
-    Border(2000, 300, 2850, 300)
-    Border(2950, 200, 2950, 1000)
-    Border(2950, 1000, 3150, 1000)
-    Border(2850, 300, 2850, 1000)
-    Border(2950, 1000, 3150, 1000)
-    Border(2650, 1000, 2850, 1000)
-    Border(2650, 1000, 2650, 1100)
-    Border(2000, 1100, 2650, 1100)
+    Border(40 * 50, 4 * 50, 59 * 50, 4 * 50)
+    Border(40 * 50, 4 * 50, 40 * 50, 6 * 50)
+    Border(40 * 50, 6 * 50, 57 * 50, 6 * 50)
+    Border(59 * 50, 4 * 50, 59 * 50, 20 * 50)
+    Border(59 * 50, 20 * 50, 63 * 50, 20 * 50)
+    Border(57 * 50, 6 * 50, 57 * 50, 20 * 50)
+    Border(59 * 50, 20 * 50, 63 * 50, 20 * 50)
+    Border(53 * 50, 20 * 50, 57 * 50, 20 * 50)
+    Border(53 * 50, 20 * 50, 53 * 50, 22 * 50)
+    Border(40 * 50, 22 * 50, 53 * 50, 22 * 50)
     Border(4 * 50, 53 * 50, 8 * 50, 53 * 50)
     Border(4 * 50, 53 * 50, 4 * 50, 57 * 50)
     Border(4 * 50, 57 * 50, 8 * 50, 57 * 50)
@@ -356,6 +366,7 @@ if __name__ == '__main__':
     horizontal_borders = pygame.sprite.Group()
     vertical_borders = pygame.sprite.Group()
     simple = pygame.sprite.Group()
+    boss_game = pygame.sprite.Group()
     all_sprites = pygame.sprite.Group()
     player_group = pygame.sprite.Group()
     screen = pygame.display.set_mode((width, height))
@@ -368,7 +379,8 @@ if __name__ == '__main__':
     }
     first_key_image = load_image('red_key.png')
     player_image = load_image('robot_1.png')
-    first_key, player, level_x, level_y = generate_level(load_level('rate.txt'))
+    boss_image = load_image('boss.png')
+    boss, first_key, player, level_x, level_y = generate_level(load_level('rate.txt'))
     camera = Camera()
     while True:
         camera.update(player)
@@ -414,6 +426,7 @@ if __name__ == '__main__':
         screen.fill((163, 73, 164))
         simple.draw(screen)
         keys.draw(screen)
+        boss_game.draw(screen)
         player_group.draw(screen)
         tp.draw(screen)
         horizontal_borders.draw(screen)
