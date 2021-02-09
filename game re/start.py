@@ -27,7 +27,7 @@ def load_level(filename):
     return list(map(lambda x: x.ljust(max_width, '.'), level_map))
 
 def generate_level(level):
-    boss, first_key, new_player, x, y = None, None, None, None, None
+    exit, room, boss, first_key, second_key, new_player, x, y = None, None, None, None, None, None, None, None
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '.':
@@ -43,14 +43,18 @@ def generate_level(level):
                 Tile('локация', x, y)
             elif level[y][x] == '1':
                 first_key = Key_1(x, y)
+            elif level[y][x] == '2':
+                second_key = Key_2(x, y)
             elif level[y][x] == 'b':
                 boss = Boss(x, y)
-    return boss, first_key, new_player, x, y
+            elif level[y][x] == 'r':
+                room = Rooms(x, y)
+            elif level[y][x] == 'e':
+                exit = Exit(x, y)
+    return exit, room, boss, first_key, second_key, new_player, x, y
 
-first_key = 0
-second_key = 0
-third_key = 0
-fourth_key = 0
+key_1 = 0
+key_2 = 0
 tile_width = tile_height = 50
 flag = 0
 FPS = 50
@@ -79,15 +83,42 @@ class Key_1(pygame.sprite.Sprite):
 
 
     def update(self):
+        global key_1
         if pygame.sprite.spritecollideany(self, player_group):
-            first_key = 1
+            key_1 = 1
             self.kill()
 
-class Teleport_blocks(pygame.sprite.Sprite):
-    def __init__(self, tile_type, pos_x, pos_y):
-        super().__init__(tp, all_sprites)
-        self.image = tile_images[tile_type]
+class Key_2(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y):
+        super().__init__(keys, all_sprites)
+        self.image = first_key_image
+        self.rect = self.image.get_rect().move(
+            tile_width * pos_x, tile_height * pos_y)
+
+
+    def update(self):
+        global key_2
+        if pygame.sprite.spritecollideany(self, player_group):
+            key_2 = 1
+            self.kill()
+
+class Rooms(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y):
+        super().__init__(rooms, all_sprites)
+        self.image = rooms_image
         self.rect = self.image.get_rect().move(tile_width * pos_x, tile_height * pos_y)
+
+    def update(self):
+        pass
+
+class Exit(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y):
+        super().__init__(exits, all_sprites)
+        self.image = exit_image
+        self.rect = self.image.get_rect().move(tile_width * pos_x, tile_height * pos_y)
+
+    def update(self):
+        pass
 
 class Border(pygame.sprite.Sprite):
     def __init__(self, x1, y1, x2, y2):
@@ -125,18 +156,25 @@ class Player(pygame.sprite.Sprite):
             tile_width * pos_x + 15, tile_height * pos_y + 5)
 
     def update(self, x, y):
+        if pygame.sprite.spritecollideany(self, exits):
+            self.rect = self.rect.move(x + 35 * 50, y + 5 * 50)
+        if pygame.sprite.spritecollideany(self, rooms):
+            if key_1 == 1 and key_2 == 1:
+                self.rect = self.rect.move(x, y + 150)
+            else:
+                self.rect = self.rect.move(x, y - 7)
         if pygame.sprite.spritecollideany(self, boss_game):
             self.rect = self.rect.move(x - 53 * 50, y + 18 * 50)
         elif pygame.sprite.spritecollideany(self, vertical_borders):
             if flag == 1:
-                self.rect = self.rect.move(x - 6, y)
+                self.rect = self.rect.move(x - 7, y)
             if flag == 2:
-                self.rect = self.rect.move(x + 6, y)
+                self.rect = self.rect.move(x + 7, y)
         elif pygame.sprite.spritecollideany(self, horizontal_borders):
             if flag == 3:
-                self.rect = self.rect.move(x, y + 6)
+                self.rect = self.rect.move(x, y + 7)
             if flag == 4:
-                self.rect = self.rect.move(x, y - 6)
+                self.rect = self.rect.move(x, y - 7)
 
 
 def terminate():
@@ -146,9 +184,9 @@ def terminate():
 
 def start_screen():
     intro_text = ["", "",
-                  "       Жизнь",
-                  "       Просто",
-                  "       Фальшивка"]
+                  "                                 Жизнь",
+                  "                                 Просто",
+                  "                                 Фальшивка"]
     fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 30)
@@ -161,6 +199,7 @@ def start_screen():
         intro_rect.x = 10
         text_coord += intro_rect.height
         screen.blit(string_rendered, intro_rect)
+    Border(18 * 50, 12 * 50, 18 * 50, 14 * 50)
     Border(40 * 50, 4 * 50, 59 * 50, 4 * 50)
     Border(40 * 50, 4 * 50, 40 * 50, 6 * 50)
     Border(40 * 50, 6 * 50, 57 * 50, 6 * 50)
@@ -361,12 +400,13 @@ if __name__ == '__main__':
     kor_y = 0
     clock = pygame.time.Clock()
     pygame.init()
-    tp = pygame.sprite.Group()
     keys = pygame.sprite.Group()
     horizontal_borders = pygame.sprite.Group()
     vertical_borders = pygame.sprite.Group()
     simple = pygame.sprite.Group()
     boss_game = pygame.sprite.Group()
+    rooms = pygame.sprite.Group()
+    exits = pygame.sprite.Group()
     all_sprites = pygame.sprite.Group()
     player_group = pygame.sprite.Group()
     screen = pygame.display.set_mode((width, height))
@@ -375,12 +415,13 @@ if __name__ == '__main__':
         'wall': load_image('box.png'),
         'empty': load_image('grass.png'),
         'tp': load_image('tp.jpg'),
-        'локация': load_image('1_TECT.png')
     }
     first_key_image = load_image('red_key.png')
     player_image = load_image('robot_1.png')
     boss_image = load_image('boss.png')
-    boss, first_key, player, level_x, level_y = generate_level(load_level('rate.txt'))
+    rooms_image = load_image('fon_lok.png')
+    exit_image = load_image('1.png')
+    exit, room, boss, first_key, second_key, player, level_x, level_y = generate_level(load_level('rate.txt'))
     camera = Camera()
     while True:
         camera.update(player)
@@ -422,13 +463,15 @@ if __name__ == '__main__':
             flag = 4
             player.update(kor_x, kor_y)
         first_key.update()
+        second_key.update()
         pygame.display.flip()
         screen.fill((163, 73, 164))
         simple.draw(screen)
         keys.draw(screen)
         boss_game.draw(screen)
         player_group.draw(screen)
-        tp.draw(screen)
+        rooms.draw(screen)
+        exits.draw(screen)
         horizontal_borders.draw(screen)
         vertical_borders.draw(screen)
         clock.tick(FPS)
