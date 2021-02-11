@@ -60,6 +60,7 @@ flag = 0
 FPS = 50
 width, height = 400, 400
 WIDTH = HEIGHT = 500
+secret = 0
 
 class Camera:
     def __init__(self):
@@ -157,7 +158,10 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, x, y):
         if pygame.sprite.spritecollideany(self, exits):
-            self.rect = self.rect.move(x + 35 * 50, y + 5 * 50)
+            if secret == 1:
+                self.rect = self.rect.move(x + 35 * 50, y + 5 * 50)
+            else:
+                self.rect = self.rect.move(x + 15 * 50, y + 17 * 50)
         if pygame.sprite.spritecollideany(self, rooms):
             if key_1 == 1 and key_2 == 1:
                 self.rect = self.rect.move(x, y + 150)
@@ -373,11 +377,9 @@ def start_screen():
     Border(62 * 50, 24 * 50, 77 * 50, 24 * 50)
     Border(77 * 50, 24 * 50, 77 * 50, 31 * 50)
     Border(77 * 50, 31 * 50, 89 * 50, 31 * 50)
-    Border(82 * 50, 29 * 50, 89 * 50, 29 * 50)
     Border(82 * 50, 20 * 50, 82 * 50, 29 * 50)
     Border(81 * 50, 20 * 50, 82 * 50, 29 * 50)
     Border(81 * 50, 18 * 50, 81 * 50, 20 * 50)
-    Border(81 * 50, 18 * 50, 89 * 50, 18 * 50)
     Border(78 * 50, 16 * 50, 89 * 50, 16 * 50)
     Border(89 * 50, 16 * 50, 89 * 50, 31 * 50)
     Border(78 * 50, 16 * 50, 78 * 50, 20 * 50)
@@ -385,6 +387,13 @@ def start_screen():
     Border(77 * 50, 20 * 50, 77 * 50, 22 * 50)
     Border(63 * 50, 22 * 50, 77 * 50, 22 * 50)
     Border(63 * 50, 20 * 50, 63 * 50, 22 * 50)
+    if secret == 1:
+        Border(82 * 50, 29 * 50, 89 * 50, 29 * 50)
+        Border(81 * 50, 18 * 50, 89 * 50, 18 * 50)
+    else:
+        Border(82 * 50, 29 * 50, 87 * 50, 29 * 50)
+        Border(87 * 50, 18 * 50, 87 * 50, 29 * 50)
+        Border(81 * 50, 18 * 50, 87 * 50, 18 * 50)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -418,10 +427,13 @@ if __name__ == '__main__':
     }
     first_key_image = load_image('red_key.png')
     player_image = load_image('robot_1.png')
-    boss_image = load_image('boss.png')
+    boss_image = load_image('1.png')
     rooms_image = load_image('fon_lok.png')
     exit_image = load_image('1.png')
-    exit, room, boss, first_key, second_key, player, level_x, level_y = generate_level(load_level('rate.txt'))
+    if secret == 1:
+        exit, room, boss, first_key, second_key, player, level_x, level_y = generate_level(load_level('rate.txt'))
+    else:
+        exit, room, boss, first_key, second_key, player, level_x, level_y = generate_level(load_level('rate1.txt'))
     camera = Camera()
     while True:
         camera.update(player)
