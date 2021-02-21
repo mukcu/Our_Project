@@ -452,9 +452,9 @@ if __name__ == '__main__':
         'empty': load_image('grass.png'),
         'tp': load_image('tp.jpg'),
     }
-    first_key_image = load_image('red_key.png')
-    player_image_1 = load_image('robot_1.png')
-    player_image_2 = load_image('robot_2.png')
+    first_key_image = load_image('key.png')
+    player_image_1 = load_image('robot.png')
+    player_image_2 = load_image('robot2.png')
     boss_image = load_image('1.png')
     rooms_image = load_image('fon_lok.png')
     exit_image = load_image('1.png')
