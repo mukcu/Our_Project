@@ -152,15 +152,15 @@ class Boss(pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
         super().__init__(player_group, all_sprites)
-        self.image = player_image
+        self.image = player_image_1
         self.rect = self.image.get_rect().move(
             tile_width * pos_x + 15, tile_height * pos_y + 5)
 
     def pic(self):
         if flag == 1:
-            pass
+            self.image = player_image_1
         elif flag == 2:
-            pass
+            self.image = player_image_2
         elif flag == 3:
             pass
         elif flag == 4:
@@ -452,7 +452,8 @@ if __name__ == '__main__':
         'tp': load_image('tp.jpg'),
     }
     first_key_image = load_image('red_key.png')
-    player_image = load_image('robot_1.png')
+    player_image_1 = load_image('robot_1.png')
+    player_image_2 = load_image('robot_2.png')
     boss_image = load_image('1.png')
     rooms_image = load_image('fon_lok.png')
     exit_image = load_image('1.png')
@@ -487,23 +488,17 @@ if __name__ == '__main__':
         if pygame.key.get_pressed()[1073741903]: #вправо
             player.rect.x += 6
             flag = 1
-            player.update(kor_x, kor_y)
-            player.pic()
         elif pygame.key.get_pressed()[1073741904]: #влево
             flag = 2
             player.rect.x -= 6
-            player.update(kor_x, kor_y)
-            player.pic()
         elif pygame.key.get_pressed()[1073741906]: #вверх
             player.rect.y -= 6
             flag = 3
-            player.update(kor_x, kor_y)
-            player.pic()
         elif pygame.key.get_pressed()[1073741905]: #вниз
             player.rect.y += 6
             flag = 4
-            player.update(kor_x, kor_y)
-            player.pic()
+        player.update(kor_x, kor_y)
+        player.pic()
         first_key.update()
         second_key.update()
         pygame.display.flip()
