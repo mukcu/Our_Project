@@ -435,6 +435,7 @@ def start_screen():
 if __name__ == '__main__':
     kor_x = 0
     kor_y = 0
+    pygame.display.set_caption('OP')
     clock = pygame.time.Clock()
     pygame.init()
     keys = pygame.sprite.Group()
