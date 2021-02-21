@@ -26,6 +26,7 @@ def load_level(filename):
     max_width = max(map(len, level_map))
     return list(map(lambda x: x.ljust(max_width, '.'), level_map))
 
+
 def generate_level(level):
     exit, room, boss, first_key, second_key, new_player, x, y = None, None, None, None, None, None, None, None
     for y in range(len(level)):
@@ -53,6 +54,7 @@ def generate_level(level):
                 exit = Exit(x, y)
     return exit, room, boss, first_key, second_key, new_player, x, y
 
+
 key_1 = 0
 key_2 = 0
 tile_width = tile_height = 50
@@ -61,6 +63,7 @@ FPS = 50
 width, height = 400, 400
 WIDTH = HEIGHT = 500
 secret = 0
+
 
 class Camera:
     def __init__(self):
@@ -75,6 +78,7 @@ class Camera:
         self.dx = -(target.rect.x + target.rect.w // 2 - width // 2)
         self.dy = -(target.rect.y + target.rect.h // 2 - height // 2)
 
+
 class Key_1(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
         super().__init__(keys, all_sprites)
@@ -82,12 +86,12 @@ class Key_1(pygame.sprite.Sprite):
         self.rect = self.image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
 
-
     def update(self):
         global key_1
         if pygame.sprite.spritecollideany(self, player_group):
             key_1 = 1
             self.kill()
+
 
 class Key_2(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
@@ -96,12 +100,12 @@ class Key_2(pygame.sprite.Sprite):
         self.rect = self.image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
 
-
     def update(self):
         global key_2
         if pygame.sprite.spritecollideany(self, player_group):
             key_2 = 1
             self.kill()
+
 
 class Rooms(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
@@ -112,6 +116,7 @@ class Rooms(pygame.sprite.Sprite):
     def update(self):
         pass
 
+
 class Exit(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
         super().__init__(exits, all_sprites)
@@ -120,6 +125,7 @@ class Exit(pygame.sprite.Sprite):
 
     def update(self):
         pass
+
 
 class Border(pygame.sprite.Sprite):
     def __init__(self, x1, y1, x2, y2):
@@ -133,6 +139,7 @@ class Border(pygame.sprite.Sprite):
             self.image = pygame.Surface([x2 - x1, 1])
             self.rect = pygame.Rect(x1, y1, x2 - x1, 1)
 
+
 class Tile(pygame.sprite.Sprite):
     def __init__(self, tile_type, pos_x, pos_y):
         super().__init__(simple, all_sprites)
@@ -143,11 +150,13 @@ class Tile(pygame.sprite.Sprite):
     def update(self):
         pass
 
+
 class Boss(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
         super().__init__(boss_game, all_sprites)
         self.image = boss_image
         self.rect = self.image.get_rect().move(tile_width * pos_x, tile_height * pos_y)
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
@@ -187,7 +196,8 @@ class Player(pygame.sprite.Sprite):
                     self.rect = self.rect.move(x, y - 7)
             if pygame.sprite.spritecollideany(self, boss_game):
                 self.rect = self.rect.move(x - 53 * 50, y + 18 * 50)
-            elif pygame.sprite.spritecollideany(self, vertical_borders) or pygame.sprite.spritecollideany(self, horizontal_borders):
+            elif pygame.sprite.spritecollideany(self, vertical_borders) \
+                    or pygame.sprite.spritecollideany(self, horizontal_borders):
                 if flag == 1:
                     self.rect = self.rect.move(x - 7, y)
                 if flag == 2:
@@ -196,6 +206,7 @@ class Player(pygame.sprite.Sprite):
                     self.rect = self.rect.move(x, y + 7)
                 if flag == 4:
                     self.rect = self.rect.move(x, y - 7)
+
 
 def terminate():
     pygame.quit()
@@ -420,6 +431,7 @@ def start_screen():
         pygame.display.flip()
         clock.tick(FPS)
 
+
 if __name__ == '__main__':
     kor_x = 0
     kor_y = 0
@@ -457,7 +469,7 @@ if __name__ == '__main__':
             camera.apply(sprite)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                    terminate()
+                terminate()
             if event.type == pygame.K_RIGHT:
                 kor = event.pos()
                 kor_x = kor[0]
@@ -474,19 +486,19 @@ if __name__ == '__main__':
                 kor = event.pos()
                 kor_x = kor[0]
                 kor_y = kor[1]
-        if pygame.key.get_pressed()[1073741903]: #вправо
+        if pygame.key.get_pressed()[1073741903]:  # вправо
             player.rect.x += 6
             flag = 1
             player.update(kor_x, kor_y)
-        elif pygame.key.get_pressed()[1073741904]: #влево
+        elif pygame.key.get_pressed()[1073741904]:  # влево
             flag = 2
             player.rect.x -= 6
             player.update(kor_x, kor_y)
-        elif pygame.key.get_pressed()[1073741906]: #вверх
+        elif pygame.key.get_pressed()[1073741906]:  # вверх
             player.rect.y -= 6
             flag = 3
             player.update(kor_x, kor_y)
-        elif pygame.key.get_pressed()[1073741905]: #вниз
+        elif pygame.key.get_pressed()[1073741905]:  # вниз
             player.rect.y += 6
             flag = 4
             player.update(kor_x, kor_y)
