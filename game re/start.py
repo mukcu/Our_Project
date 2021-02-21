@@ -157,29 +157,45 @@ class Player(pygame.sprite.Sprite):
             tile_width * pos_x + 15, tile_height * pos_y + 5)
 
     def update(self, x, y):
-        if pygame.sprite.spritecollideany(self, exits):
-            if secret == 1:
+        if secret == 1:
+            if pygame.sprite.spritecollideany(self, exits):
                 self.rect = self.rect.move(x + 35 * 50, y + 5 * 50)
-            else:
+            if pygame.sprite.spritecollideany(self, rooms):
+                if key_1 == 1 and key_2 == 1:
+                    self.rect = self.rect.move(x, y + 150)
+                else:
+                    self.rect = self.rect.move(x, y - 7)
+            if pygame.sprite.spritecollideany(self, boss_game):
+                self.rect = self.rect.move(x - 53 * 50, y + 18 * 50)
+            elif pygame.sprite.spritecollideany(self, vertical_borders):
+                if flag == 1:
+                    self.rect = self.rect.move(x - 7, y)
+                if flag == 2:
+                    self.rect = self.rect.move(x + 7, y)
+            elif pygame.sprite.spritecollideany(self, horizontal_borders):
+                if flag == 3:
+                    self.rect = self.rect.move(x, y + 7)
+                if flag == 4:
+                    self.rect = self.rect.move(x, y - 7)
+        else:
+            if pygame.sprite.spritecollideany(self, exits):
                 self.rect = self.rect.move(x + 15 * 50, y + 17 * 50)
-        if pygame.sprite.spritecollideany(self, rooms):
-            if key_1 == 1 and key_2 == 1:
-                self.rect = self.rect.move(x, y + 150)
-            else:
-                self.rect = self.rect.move(x, y - 7)
-        if pygame.sprite.spritecollideany(self, boss_game):
-            self.rect = self.rect.move(x - 53 * 50, y + 18 * 50)
-        elif pygame.sprite.spritecollideany(self, vertical_borders):
-            if flag == 1:
-                self.rect = self.rect.move(x - 7, y)
-            if flag == 2:
-                self.rect = self.rect.move(x + 7, y)
-        elif pygame.sprite.spritecollideany(self, horizontal_borders):
-            if flag == 3:
-                self.rect = self.rect.move(x, y + 7)
-            if flag == 4:
-                self.rect = self.rect.move(x, y - 7)
-
+            if pygame.sprite.spritecollideany(self, rooms):
+                if key_1 == 1 and key_2 == 1:
+                    self.rect = self.rect.move(x, y + 150)
+                else:
+                    self.rect = self.rect.move(x, y - 7)
+            if pygame.sprite.spritecollideany(self, boss_game):
+                self.rect = self.rect.move(x - 53 * 50, y + 18 * 50)
+            elif pygame.sprite.spritecollideany(self, vertical_borders) or pygame.sprite.spritecollideany(self, horizontal_borders):
+                if flag == 1:
+                    self.rect = self.rect.move(x - 7, y)
+                if flag == 2:
+                    self.rect = self.rect.move(x + 7, y)
+                if flag == 3:
+                    self.rect = self.rect.move(x, y + 7)
+                if flag == 4:
+                    self.rect = self.rect.move(x, y - 7)
 
 def terminate():
     pygame.quit()
