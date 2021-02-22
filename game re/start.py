@@ -61,7 +61,6 @@ tile_width = tile_height = 50
 flag = 0
 FPS = 50
 width, height = 400, 400
-WIDTH = HEIGHT = 400
 secret = 0
 
 
@@ -224,7 +223,7 @@ def terminate():
 
 
 def start_screen():
-    fon = pygame.transform.scale(load_image('fon.png'), (WIDTH, HEIGHT))
+    fon = pygame.transform.scale(load_image('fon.png'), (width, height))
     screen.blit(fon, (0, 0))
     Border(18 * 50, 12 * 50, 18 * 50, 14 * 50)
     Border(40 * 50, 4 * 50, 59 * 50, 4 * 50)
