@@ -61,7 +61,7 @@ tile_width = tile_height = 50
 flag = 0
 FPS = 50
 width, height = 400, 400
-WIDTH = HEIGHT = 500
+WIDTH = HEIGHT = 400
 secret = 0
 
 
@@ -224,22 +224,8 @@ def terminate():
 
 
 def start_screen():
-    intro_text = ["", "",
-                  "                                 Жизнь",
-                  "                                 Просто",
-                  "                                 Фальшивка"]
-    fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
+    fon = pygame.transform.scale(load_image('fon.png'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
-    font = pygame.font.Font(None, 30)
-    text_coord = 50
-    for line in intro_text:
-        string_rendered = font.render(line, 1, pygame.Color('black'))
-        intro_rect = string_rendered.get_rect()
-        text_coord += 10
-        intro_rect.top = text_coord
-        intro_rect.x = 10
-        text_coord += intro_rect.height
-        screen.blit(string_rendered, intro_rect)
     Border(18 * 50, 12 * 50, 18 * 50, 14 * 50)
     Border(40 * 50, 4 * 50, 59 * 50, 4 * 50)
     Border(40 * 50, 4 * 50, 40 * 50, 6 * 50)
