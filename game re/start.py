@@ -453,9 +453,9 @@ if __name__ == '__main__':
     first_key_image2 = load_image('key2.png')
     player_image_1 = load_image('robot.png')
     player_image_2 = load_image('robot2.png')
-    boss_image = load_image('1.png')
-    rooms_image = load_image('fon_lok.png')
-    exit_image = load_image('1.png')
+    boss_image = load_image('stairs.png')
+    rooms_image = load_image('door.png')
+    exit_image = load_image('stairs.png')
     if secret == 1:
         exit, room, boss, first_key, second_key, player, level_x, level_y = generate_level(load_level('rate.txt'))
     else:
