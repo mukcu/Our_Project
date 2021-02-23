@@ -55,8 +55,8 @@ def generate_level(level):
     return exit, room, boss, first_key, second_key, new_player, x, y
 
 
-key_1 = 0
-key_2 = 0
+key_1 = 1
+key_2 = 1
 tile_width = tile_height = 50
 flag = 0
 FPS = 50
@@ -200,7 +200,7 @@ class Player(pygame.sprite.Sprite):
                 self.rect = self.rect.move(x + 15 * 50, y + 17 * 50)
             if pygame.sprite.spritecollideany(self, rooms):
                 if key_1 == 1 and key_2 == 1:
-                    self.rect = self.rect.move(x, y + 150)
+                    self.rect = self.rect.move(x - 150, y + 12 * 50)
                 else:
                     self.rect = self.rect.move(x, y - 7)
             if pygame.sprite.spritecollideany(self, boss_game):
