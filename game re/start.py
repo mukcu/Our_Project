@@ -200,7 +200,7 @@ class Player(pygame.sprite.Sprite):
                 self.rect = self.rect.move(x + 15 * 50, y + 17 * 50)
             if pygame.sprite.spritecollideany(self, rooms):
                 if key_1 == 1 and key_2 == 1:
-                    self.rect = self.rect.move(x, y + 150)
+                    self.rect = self.rect.move(x - 150, y + 12 * 50)
                 else:
                     self.rect = self.rect.move(x, y - 7)
             if pygame.sprite.spritecollideany(self, boss_game):
