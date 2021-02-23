@@ -205,8 +205,8 @@ class Player(pygame.sprite.Sprite):
                     self.rect = self.rect.move(x, y - 7)
             if pygame.sprite.spritecollideany(self, boss_game):
                 self.rect = self.rect.move(x - 53 * 50, y + 18 * 50)
-            elif pygame.sprite.spritecollideany(self, vertical_borders) or pygame.sprite.spritecollideany(self,
-                                                                                                          horizontal_borders):
+            elif pygame.sprite.spritecollideany(self, vertical_borders) \
+                    or pygame.sprite.spritecollideany(self, horizontal_borders):
                 if flag == 1:
                     self.rect = self.rect.move(x - 7, y)
                 if flag == 2:
