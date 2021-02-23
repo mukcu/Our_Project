@@ -55,8 +55,8 @@ def generate_level(level):
     return exit, room, boss, first_key, second_key, new_player, x, y
 
 
-key_1 = 1
-key_2 = 1
+key_1 = 0
+key_2 = 0
 tile_width = tile_height = 50
 flag = 0
 FPS = 50
