@@ -33,15 +33,81 @@ def generate_level(level):
         for x in range(len(level[y])):
             if level[y][x] == '.':
                 Tile('empty', x, y)
-            elif level[y][x] == '$':
-                Tile('tp', x, y)
+            elif level[y][x] == 'i':
+                Tile('i', x, y)
+            elif level[y][x] == 'u':
+                Tile('u', x, y)
+            elif level[y][x] == '3':
+                Tile('3', x, y)
+            elif level[y][x] == '4':
+                Tile('4', x, y)
+            elif level[y][x] == '5':
+                Tile('5', x, y)
+            elif level[y][x] == '6':
+                Tile('6', x, y)
+            elif level[y][x] == '7':
+                Tile('7', x, y)
+            elif level[y][x] == '8':
+                Tile('8', x, y)
+            elif level[y][x] == '9':
+                Tile('9', x, y)
+            elif level[y][x] == '0':
+                Tile('0', x, y)
+            elif level[y][x] == '-':
+                Tile('-', x, y)
+            elif level[y][x] == '=':
+                Tile('=', x, y)
+            elif level[y][x] == '+':
+                Tile('+', x, y)
+            elif level[y][x] == 'p':
+                Tile('p', x, y)
+            elif level[y][x] == 'o':
+                Tile('o', x, y)
+            elif level[y][x] == 'y':
+                Tile('y', x, y)
+            elif level[y][x] == 't':
+                Tile('t', x, y)
+            elif level[y][x] == 'q':
+                Tile('q', x, y)
+            elif level[y][x] == 'a':
+                Tile('a', x, y)
+            elif level[y][x] == 'z':
+                Tile('z', x, y)
+            elif level[y][x] == 'x':
+                Tile('x', x, y)
+            elif level[y][x] == 'c':
+                Tile('c', x, y)
+            elif level[y][x] == 'v':
+                Tile('v', x, y)
+            elif level[y][x] == 'f':
+                Tile('f', x, y)
+            elif level[y][x] == 'n':
+                Tile('n', x, y)
+            elif level[y][x] == 'm':
+                Tile('m', x, y)
+            elif level[y][x] == ',':
+                Tile(',', x, y)
+            elif level[y][x] == '/':
+                Tile('/', x, y)
+            elif level[y][x] == ']':
+                Tile(']', x, y)
+            elif level[y][x] == '[':
+                Tile('[', x, y)
+            elif level[y][x] == ';':
+                Tile(';', x, y)
+            elif level[y][x] == 'l':
+                Tile('l', x, y)
+            elif level[y][x] == 'k':
+                Tile('k', x, y)
+            elif level[y][x] == 'j':
+                Tile('j', x, y)
+            elif level[y][x] == 'h':
+                Tile('h', x, y)
             elif level[y][x] == '#':
                 Tile('wall', x, y)
             elif level[y][x] == '@':
                 Tile('empty', x, y)
                 new_player = Player(x, y)
-            elif level[y][x] == '/':
-                Tile('локация', x, y)
             elif level[y][x] == '1':
                 first_key = Key_1(x, y)
             elif level[y][x] == '2':
@@ -55,8 +121,8 @@ def generate_level(level):
     return exit, room, boss, first_key, second_key, new_player, x, y
 
 
-key_1 = 0
-key_2 = 0
+key_1 = 1
+key_2 = 1
 tile_width = tile_height = 50
 flag = 0
 FPS = 50
@@ -447,7 +513,41 @@ if __name__ == '__main__':
     tile_images = {
         'wall': load_image('box.png'),
         'empty': load_image('grass.png'),
-        'tp': load_image('tp.jpg'),
+        'i': load_image('gameover/1.png'),
+        'u': load_image('gameover/2.png'),
+        '3': load_image('gameover/3.png'),
+        '4': load_image('gameover/4.png'),
+        '5': load_image('gameover/5.png'),
+        '6': load_image('gameover/6.png'),
+        '7': load_image('gameover/7.png'),
+        '8': load_image('gameover/8.png'),
+        '9': load_image('gameover/9.png'),
+        '0': load_image('gameover/10.png'),
+        '-': load_image('gameover/11.png'),
+        '=': load_image('gameover/12.png'),
+        '+': load_image('gameover/13.png'),
+        'p': load_image('gameover/14.png'),
+        'o': load_image('gameover/15.png'),
+        'y': load_image('gameover/16.png'),
+        't': load_image('gameover/17.png'),
+        'q': load_image('gameover/18.png'),
+        'a': load_image('gameover/19.png'),
+        'z': load_image('gameover/20.png'),
+        'x': load_image('gameover/21.png'),
+        'c': load_image('gameover/22.png'),
+        'v': load_image('gameover/23.png'),
+        'f': load_image('gameover/24.png'),
+        'n': load_image('gameover/25.png'),
+        'm': load_image('gameover/26.png'),
+        ',': load_image('gameover/27.png'),
+        '/': load_image('gameover/28.png'),
+        ']': load_image('gameover/29.png'),
+        '[': load_image('gameover/30.png'),
+        ';': load_image('gameover/31.png'),
+        'l': load_image('gameover/32.png'),
+        'k': load_image('gameover/33.png'),
+        'j': load_image('gameover/34.png'),
+        'h': load_image('gameover/35.png'),
     }
     first_key_image = load_image('key1.png')
     first_key_image2 = load_image('key2.png')
